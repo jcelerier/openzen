@@ -198,29 +198,37 @@ namespace zen
                 notifyProgress(m_discoverySubscribers, (idx + 0.5f) / nIoSystems);
                 lock.unlock();
 
+                std::vector<ZenSensorDesc> devices;
                 try
                 {
-                    ioSystems[idx].get().listDevices(m_devices);
+                    ioSystems[idx].get().listDevices(devices);
                 }
                 catch (...)
                 {
                     // [TODO] Make listDevices noexcept and move try-catch block into crashing ioSystem
                     continue;
                 }
-            }
 
+                // Report this IO system's devices before moving on to the next
+                // one. Emitting everything at the end of the whole listing
+                // would hold a USB sensor found in milliseconds behind a
+                // Bluetooth inquiry that takes ten seconds or more.
+                lock.lock();
+                for (auto& device : devices)
+                {
+                    ZenEvent event{};
+                    event.eventType = ZenEventType_SensorFound;
+                    event.data.sensorFound = device;
+
+                    for (auto& subscriber : m_discoverySubscribers)
+                        subscriber.get().notifyEvent(event);
+                }
+                lock.unlock();
+
+                m_devices.insert(m_devices.end(), devices.begin(), devices.end());
+            }
 
             lock.lock();
-            for (auto& device : m_devices)
-            {
-                ZenEvent event{};
-                event.eventType = ZenEventType_SensorFound;
-                event.data.sensorFound = device;
-
-                for (auto& subscriber : m_discoverySubscribers)
-                    subscriber.get().notifyEvent(event);
-            }
-
             notifyProgress(m_discoverySubscribers, 1.0f);
             
             m_devices.clear();
