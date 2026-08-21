@@ -60,6 +60,9 @@ namespace zen
     private:
         LockingQueue<ZenEvent> m_eventQueue;
 
+        /* Guards m_sensors: obtain()/release()/findSensor() may be called
+           concurrently from several threads of the host application. */
+        mutable std::mutex m_sensorsMutex;
         std::unordered_map<uintptr_t, std::weak_ptr<Sensor>> m_sensors;
     };
 }

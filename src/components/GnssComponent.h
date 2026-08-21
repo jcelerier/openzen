@@ -16,8 +16,10 @@
 #include <optional>
 #include <memory>
 
+#ifndef ZEN_NO_RTK
 #include "utility/gnss/RTCM3NetworkSource.h"
 #include "utility/gnss/RTCM3SerialSource.h"
+#endif
 
 #include "SensorComponent.h"
 #include "communication/SyncedModbusCommunicator.h"
@@ -83,8 +85,10 @@ namespace zen
         ZenError storeGnssState() noexcept;
         nonstd::expected<ZenEventData, ZenError> parseSensorData(gsl::span<const std::byte> data) const noexcept;
         SyncedModbusCommunicator & m_communicator;
+#ifndef ZEN_NO_RTK
         std::unique_ptr<RTCM3NetworkSource> m_rtcm3network;
         std::unique_ptr<RTCM3SerialSource> m_rtcm3serial;
+#endif
     };
 }
 #endif

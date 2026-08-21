@@ -32,6 +32,7 @@ namespace zen
 
     SensorClient::~SensorClient() noexcept
     {
+        std::lock_guard<std::mutex> lock(m_sensorsMutex);
         for (auto& pair : m_sensors)
             if (auto sensor = pair.second.lock())
                 sensor->unsubscribe(m_eventQueue);
@@ -62,6 +63,7 @@ namespace zen
 
     std::shared_ptr<Sensor> SensorClient::findSensor(ZenSensorHandle_t handle) noexcept
     {
+        std::lock_guard<std::mutex> lock(m_sensorsMutex);
         auto it = m_sensors.find(handle.handle);
         if (it != m_sensors.end())
         {
@@ -80,7 +82,10 @@ namespace zen
         if (auto sensor = manager.obtain(desc))
         {
             if (sensor.value()->subscribe(m_eventQueue))
+            {
+                std::lock_guard<std::mutex> lock(m_sensorsMutex);
                 m_sensors.emplace(sensor.value()->token(), *sensor);
+            }
 
             return std::move(*sensor);
         }
@@ -105,8 +110,13 @@ namespace zen
     ZenError SensorClient::release(std::shared_ptr<Sensor> sensor) noexcept
     {
         sensor->releaseProcessors();
+        {
+            std::lock_guard<std::mutex> lock(m_sensorsMutex);
+            m_sensors.erase(sensor->token());
+        }
+        /* Must happen outside the lock: unsubscribing the last queue destroys
+           the Sensor, whose destructor closes the IO interface. */
         sensor->unsubscribe(m_eventQueue);
-        m_sensors.erase(sensor->token());
         return ZenError_None;
     }
 

@@ -71,6 +71,11 @@ namespace zen
 
     ZenError GnssComponent::forwardRtkCorrections(RtkCorrectionSource correction,
         std::string const& hostname, unsigned long port) noexcept {
+#ifdef ZEN_NO_RTK
+        (void) correction; (void) hostname; (void) port;
+        spdlog::error("This build of OpenZen was compiled without RTK correction support");
+        return ZenError::ZenError_NotSupported;
+#else
         if (correction == RtkCorrectionSource::RTCM3NetworkStream) {
             m_rtcm3network = std::make_unique<RTCM3NetworkSource>();
 
@@ -108,9 +113,11 @@ namespace zen
         spdlog::error("Selected RTK correction source not supported");
 
         return ZenError::ZenError_InvalidArgument;
+#endif
     }
 
     ZenError GnssComponent::stopRtkCorrections() noexcept {
+#ifndef ZEN_NO_RTK
         if (m_rtcm3network) {
             m_rtcm3network->stop();
             m_rtcm3network = nullptr;
@@ -119,6 +126,7 @@ namespace zen
             m_rtcm3serial->stop();
             m_rtcm3serial = nullptr;
         }
+#endif
       return ZenError::ZenError_None;
    }
 

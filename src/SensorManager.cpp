@@ -162,6 +162,8 @@ namespace zen
     {
         std::lock_guard<std::mutex> lock(m_sensorsMutex);
         auto it = m_sensors.find(sensorHandle);
+        if (it == m_sensors.end())
+            return nullptr;
 
         const auto sensor = *it;
         m_sensors.erase(it);
