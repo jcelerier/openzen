@@ -139,7 +139,7 @@ SiLabsSerialDevices getSiLabsDevices()
 
         const auto ttyDevice = sysFsGetDeviceTtyPath(usb_device.path());
         if (ttyDevice) {
-            spdlog::info("Found serial name {0} for device {1}", *serial_string, ttyDevice->u8string());
+            spdlog::info("Found serial name {0} for device {1}", *serial_string, ttyDevice->string());
             found_devices[*serial_string].push_back(*ttyDevice);
         }
     }

@@ -77,7 +77,7 @@ namespace zen
         Owner& operator=(Owner&& other) noexcept
         {
             m_data = std::move(other.m_data);
-            m_borrowed = other.m_obtained;
+            m_borrowed = other.m_borrowed;
             return *this;
         }
 
