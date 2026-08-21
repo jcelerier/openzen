@@ -89,22 +89,45 @@ namespace zen
         if (m_terminate)
             return ZenError_None;
 
-        if (::aio_read(currentCB) == -1)
+        if (::aio_read(currentCB) == -1) {
+            spdlog::error("Cannot queue a read on {0}: {1}", m_identifier, ::strerror(errno));
+            publishIoError(ZenError_Io_ReadFailed);
             return ZenError_Io_ReadFailed;
+        }
 
         while (!m_terminate) {
-            if (::aio_suspend(&currentCB, 1, nullptr) == -1)
-                return ZenError_Io_ReadFailed;
+            // Bounded wait: aio_suspend with a null timeout would block for
+            // ever on a silent sensor, and the destructor joins this thread.
+            struct timespec timeout{};
+            timeout.tv_sec = 0;
+            timeout.tv_nsec = 200 * 1000 * 1000;
 
-            if (::aio_error(currentCB) != 0)
+            if (::aio_suspend(&currentCB, 1, &timeout) == -1) {
+                if (errno == EAGAIN || errno == EINTR)
+                    continue; // nothing yet, or interrupted by a signal
+                spdlog::error("Read from {0} failed while waiting: {1}", m_identifier, ::strerror(errno));
+                publishIoError(ZenError_Io_ReadFailed);
                 return ZenError_Io_ReadFailed;
+            }
+
+            const int status = ::aio_error(currentCB);
+            if (status == EINPROGRESS)
+                continue; // spurious wakeup, the read is still outstanding
+            if (status != 0) {
+                spdlog::error("Read from {0} failed: {1}", m_identifier, ::strerror(status));
+                publishIoError(ZenError_Io_ReadFailed);
+                return ZenError_Io_ReadFailed;
+            }
 
             const auto nBytesReceived = ::aio_return(currentCB);
 
             // Start next read, process data (if any) in parallel.
             std::swap(currentCB, lastCB);
-            if (::aio_read(currentCB) == -1)
+            if (::aio_read(currentCB) == -1) {
+                spdlog::error("Cannot queue a read on {0}: {1}", m_identifier, ::strerror(errno));
+                publishIoError(ZenError_Io_ReadFailed);
                 return ZenError_Io_ReadFailed;
+            }
 
             if (nBytesReceived > 0) {
                 if (auto error = publishReceivedData(gsl::make_span((std::byte *)lastCB->aio_buf, nBytesReceived)))

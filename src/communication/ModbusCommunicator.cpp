@@ -85,4 +85,10 @@ namespace zen
 
         return ZenError_None;
     }
+
+    void ModbusCommunicator::processIoError(ZenError error) noexcept
+    {
+        if (m_subscriber)
+            m_subscriber->processIoError(error);
+    }
 }

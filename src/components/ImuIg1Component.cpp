@@ -98,6 +98,19 @@ namespace zen
 
         // to store sensor values which are not forwaded to the ImuData class for Ig1
         float unusedValue[3];
+
+        // Which of the two gyros actually carries this sensor's measurements.
+        //
+        // The model name is not a reliable guide: the LPMS-BE1 is not the only
+        // unit that reports through the second gyro - an LPMS-CURS3 does too -
+        // and a name not in the negotiator's table would otherwise have its
+        // gyro parsed into the scratch buffer above and silently discarded.
+        // The output bitset says which slot is enabled, so use that, and keep
+        // the configured flag as an override.
+        const bool gyr0Enabled
+            = m_properties->getBool(ZenImuProperty_OutputRawGyr0).value_or(false)
+              || m_properties->getBool(ZenImuProperty_OutputGyr0AlignCalib).value_or(false);
+        const bool secondGyroIsPrimary = m_secondGyroIsPrimary || !gyr0Enabled;
         if (auto enabled = sensor_parsing_util::readVector3IfAvailable(ZenImuProperty_OutputRawAcc,
             m_properties, data, &imuData.aRaw[0])) {}
         else {
@@ -119,7 +132,7 @@ namespace zen
 
         // LPMS-BE1 writes its only gyro values in the gyr1 field
         float * secondGyroTargetRaw = &unusedValue[0];
-        if (m_secondGyroIsPrimary) {
+        if (secondGyroIsPrimary) {
             secondGyroTargetRaw = &imuData.gRaw[0];
         }
         if (auto enabled = sensor_parsing_util::readVector3IfAvailable(ZenImuProperty_OutputRawGyr1,
@@ -153,7 +166,7 @@ namespace zen
 
         // LPMS-BE1 writes its only gyro values in the gyr1 field
         float * secondGyroTarget = &unusedValue[0];
-        if (m_secondGyroIsPrimary) {
+        if (secondGyroIsPrimary) {
             secondGyroTarget = &imuData.g[0];
         }
         if (auto enabled = sensor_parsing_util::readVector3IfAvailable(ZenImuProperty_OutputGyr1AlignCalib,

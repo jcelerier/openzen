@@ -329,6 +329,17 @@ namespace zen
             SensorManager::get().release({ m_token });
     }
 
+    void Sensor::processIoError(ZenError error) noexcept
+    {
+        ZenEventData eventData{};
+        eventData.sensorDisconnected.error = error;
+        ZenEvent disconnected{ ZenEventType_SensorDisconnected, {m_token}, {0}, eventData };
+
+        std::lock_guard<std::mutex> lock(m_subscribersMutex);
+        for (auto subscriber : m_subscribers)
+            subscriber.get().push(disconnected);
+    }
+
     ZenError Sensor::processReceivedData(uint8_t, uint8_t function, gsl::span<const std::byte> data) noexcept
     {
         if (m_config.version == 0)

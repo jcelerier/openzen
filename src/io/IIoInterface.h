@@ -26,6 +26,11 @@ namespace zen
     {
     public:
         virtual ZenError processData(gsl::span<const std::byte> data) noexcept = 0;
+
+        /** The IO interface has stopped: the link is gone and no further data
+            will arrive. Reported so that the host can react instead of
+            waiting on a stream that will never resume. */
+        virtual void processIoError(ZenError) noexcept {}
     };
 
     class IIoInterface
@@ -55,6 +60,9 @@ namespace zen
     protected:
         /** Publish received data to the subscriber */
         ZenError publishReceivedData(gsl::span<const std::byte> data) { return m_subscriber.processData(data); }
+
+        /** Report that this interface has given up on the link. */
+        void publishIoError(ZenError error) noexcept { m_subscriber.processIoError(error); }
 
     private:
         IIoDataSubscriber& m_subscriber;

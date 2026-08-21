@@ -119,13 +119,26 @@ namespace zen
             return nonstd::make_unexpected(ZenSensorInitError_InvalidAddress);
         }
         
-        auto ioInterface = std::make_unique<PosixDeviceInterface<LinuxDeviceSystem>>(subscriber, ttyDevice, fdRead, fdWrite);
+        // Configure the terminal *before* creating the interface: its
+        // constructor starts the polling thread, which immediately issues an
+        // aio_read. Doing it the other way round means that first read runs
+        // against a terminal still in canonical mode, where the driver hands
+        // data over line by line and the sensor's binary frames never arrive.
+        if (ZenSensorInitError error = setupFD(fdRead); error != ZenSensorInitError_None) {
+            ::close(fdRead);
+            ::close(fdWrite);
+            return nonstd::make_unexpected(error);
+        }
+        if (ZenSensorInitError error = setupFD(fdWrite); error != ZenSensorInitError_None) {
+            ::close(fdRead);
+            ::close(fdWrite);
+            return nonstd::make_unexpected(error);
+        }
 
-        if (ZenSensorInitError error = setupFD(fdRead); error != ZenSensorInitError_None)
-            return nonstd::make_unexpected(error);
-        if (ZenSensorInitError error = setupFD(fdWrite); error != ZenSensorInitError_None)
-            return nonstd::make_unexpected(error);
-        return std::move(ioInterface);
+        // Drop anything the driver buffered before we owned the settings.
+        ::tcflush(fdRead, TCIOFLUSH);
+
+        return std::make_unique<PosixDeviceInterface<LinuxDeviceSystem>>(subscriber, ttyDevice, fdRead, fdWrite);
     }
 
     nonstd::expected<std::vector<int32_t>, ZenError> LinuxDeviceSystem::supportedBaudRates() noexcept

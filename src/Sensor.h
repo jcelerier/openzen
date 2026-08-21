@@ -104,6 +104,12 @@ namespace zen
     private:
         ZenError processReceivedData(uint8_t address, uint8_t function, gsl::span<const std::byte> data) noexcept override;
 
+        /** The IO interface has given up on the link: tell every subscriber
+            that this sensor is gone. OpenZen otherwise only reports a
+            disconnection when the sensor is released deliberately, so an
+            unplugged device would simply go quiet for ever. */
+        void processIoError(ZenError error) noexcept override;
+
         ZenError processReceivedEvent(ZenEvent) noexcept override;
 
         void publishEvent(const ZenEvent& event) noexcept;

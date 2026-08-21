@@ -72,6 +72,7 @@ namespace zen
 
     private:
         ZenError processData(gsl::span<const std::byte> data) noexcept override;
+        void processIoError(ZenError error) noexcept override;
 
         std::unique_ptr<modbus::IFrameFactory> m_factory;
 
@@ -88,6 +89,9 @@ namespace zen
     public:
         virtual ZenError processReceivedData(uint8_t address, uint8_t function,
           gsl::span<const std::byte> data) noexcept = 0;
+
+        /** The underlying IO interface has given up on the link. */
+        virtual void processIoError(ZenError) noexcept {}
     };
 }
 

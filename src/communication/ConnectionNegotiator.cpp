@@ -171,6 +171,24 @@ namespace zen
             return itSensorConfig->second;
         }
 
+        // No entry for this model. The handshake above already told us which
+        // protocol the sensor speaks, so trust that rather than the fallback:
+        // a sensor that answered the version-1 firmware and model queries
+        // speaks version 1 whether or not we have heard of it. Handing it the
+        // legacy configuration makes the component factory ask for a legacy
+        // config bitset, which such a sensor answers with a bare
+        // acknowledgement, and initialization fails on a device that was
+        // talking to us perfectly well. LPMS-CURS3 is one such model.
+        if (!m_isLegacy) {
+            spdlog::debug("No entry for sensor {0}, but it speaks the version 1 "
+                          "protocol; using the version 1 configuration",
+                localDeviceName);
+            SensorConfig config;
+            config.version = 1;
+            config.components.push_back(ComponentConfig{1, g_zenSensorType_Imu});
+            return config;
+        }
+
         // find the wildcard one
         auto itSensorConfigWildcard = std::find_if(m_sensorConfigs.begin(), m_sensorConfigs.end(),
             [](auto const& config) {
