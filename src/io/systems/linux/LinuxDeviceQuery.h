@@ -16,10 +16,15 @@
 #include <spdlog/spdlog.h>
 
 /*
-Older GCCs (for examle GCC 7, default on Ubunut 18.04) and clangs still provide
-C++ filesystem in an experimental namespace
+Older GCCs (for example GCC 7, default on Ubuntu 18.04) and clangs still
+provide C++ filesystem in an experimental namespace.
+
+Test for the header rather than for a GCC version: clang reports __GNUC__ as 4
+whatever libstdc++ it is using, so a version test silently selects the
+experimental namespace and the resulting binary fails to link against any
+current libstdc++.
 */
-#if __GNUC__ > 8
+#if __has_include(<filesystem>)
     #include <filesystem>
     namespace fs = std::filesystem;
 #else

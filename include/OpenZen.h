@@ -636,7 +636,7 @@ namespace zen
          */
         std::pair<ZenSensorInitError, ZenSensor> obtainSensor(const ZenSensorDesc& desc) noexcept
         {
-            ZenSensorHandle_t sensorHandle;
+            ZenSensorHandle_t sensorHandle{0};
             const auto error = ZenObtainSensor(m_handle, &desc, &sensorHandle);
             return std::make_pair(error, ZenSensor(m_handle, sensorHandle));
         }
@@ -651,7 +651,7 @@ namespace zen
         std::pair<ZenSensorInitError, ZenSensor> obtainSensorByName(const std::string& ioType,
             const std::string& identifier, uint32_t baudrate = 0) noexcept
         {
-            ZenSensorHandle_t sensorHandle;
+            ZenSensorHandle_t sensorHandle{0};
             const auto error = ZenObtainSensorByName(m_handle, ioType.c_str(), identifier.c_str(),
                 baudrate, &sensorHandle);
             return std::make_pair(error, ZenSensor(m_handle, sensorHandle));
