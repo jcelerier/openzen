@@ -13,6 +13,7 @@
 #include "EnumerateSerialPorts.h"
 
 #include <spdlog/spdlog.h>
+#include <cstring>
 
 namespace zen
 {

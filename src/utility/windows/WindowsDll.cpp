@@ -16,8 +16,9 @@
 #include <string>
 #include <type_traits>
 
-#include <gsl/gsl_util>
+#include <gsl/util>
 #include <Windows.h>
+#include <vector>
 
 #include "FindThisModule.h"
 
@@ -99,6 +100,10 @@ namespace zen
         if (handle == nullptr)
             return nullptr;
 
-        return ::GetProcAddress(reinterpret_cast<HMODULE>(handle), procName.data());
+        // GetProcAddress returns FARPROC, a function pointer: converting it to
+        // void* is not implicit, and only Win32's own convention makes it
+        // meaningful.
+        return reinterpret_cast<void*>(
+            ::GetProcAddress(reinterpret_cast<HMODULE>(handle), procName.data()));
     }
 }
