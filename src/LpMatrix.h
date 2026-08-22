@@ -106,7 +106,7 @@ void quaternionCon(LpVector4f* src, LpVector4f* dest);
 void quatRotVec(LpVector4f q, LpVector3f vI, LpVector3f* vO);
 
 #ifdef __WIN32
-    void print4x4(LpMatrix4x4f m)
+    void print4x4(LpMatrix4x4f m);
 #endif
 
 #endif
