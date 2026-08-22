@@ -1,5 +1,6 @@
 #include <winsock2.h>
 #include <ws2bth.h>
+#include <stdlib.h>
 #include <string>
 #include "BluetoothHelpers.h"
 
