@@ -16,6 +16,7 @@
 #include <vector>
 #include <sstream>
 #include <gsl/span>
+#include <string>
 
 namespace util
 {

@@ -18,6 +18,7 @@
 #include <tuple>
 #include <unordered_map>
 #include <vector>
+#include <string_view>
 
 #include "ZenTypes.h"
 #include "io/IIoSystem.h"

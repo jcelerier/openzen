@@ -12,6 +12,7 @@
 #define ZEN_UTILITY_WINDOWS_WINDOWSDLL_H_
 
 #include <string>
+#include <string_view>
 
 #include "utility/IPlatformDll.h"
 

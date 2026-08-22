@@ -15,6 +15,7 @@
 #include "io/IIoInterface.h"
 #include "io/IIoEventInterface.h"
 #include <memory>
+#include <vector>
 
 namespace zmq {
     class context_t;

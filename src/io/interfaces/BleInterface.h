@@ -15,6 +15,8 @@
 #include <string>
 #include <string_view>
 #include <thread>
+#include <vector>
+#include <memory>
 
 #include "io/IIoInterface.h"
 #include "io/ble/BleDeviceHandler.h"

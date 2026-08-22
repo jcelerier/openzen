@@ -20,6 +20,9 @@
 #include <spdlog/spdlog.h>
 #include <zmq.hpp>
 #include <sstream>
+#include <vector>
+#include <string>
+#include <optional>
 
 namespace zen {
 

@@ -17,6 +17,9 @@
 
 #include <gsl/span>
 #include <QLowEnergyController>
+#include <vector>
+#include <string_view>
+#include <memory>
 
 #include "ZenTypes.h"
 #include "utility/LockingQueue.h"

@@ -12,6 +12,9 @@
 #define ZEN_COMMUNICATION_MODBUSCOMMUNICATOR_H_
 
 #include <atomic>
+#include <vector>
+#include <string_view>
+#include <memory>
 
 #include "Modbus.h"
 #include "io/IIoInterface.h"

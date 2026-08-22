@@ -23,6 +23,9 @@
 #include <asio/write.hpp>
 #include <asio/buffer.hpp>
 #include <asio/serial_port.hpp>
+#include <string>
+#include <memory>
+#include <array>
 
 namespace zen {
 

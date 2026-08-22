@@ -19,6 +19,7 @@
 
 #define NOMINMAX
 #include <Windows.h>
+#include <vector>
 #undef NOMINMAX
 
 #include "io/IIoInterface.h"

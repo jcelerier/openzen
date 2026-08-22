@@ -18,6 +18,8 @@
 
 #include <zmq.hpp>
 #include <spdlog/spdlog.h>
+#include <string>
+#include <memory>
 
 namespace zen
 {

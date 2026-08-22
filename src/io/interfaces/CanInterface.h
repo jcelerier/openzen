@@ -12,6 +12,8 @@
 #define ZEN_IO_INTERFACES_CANINTERFACE_H_
 
 #include <cstdint>
+#include <vector>
+#include <string_view>
 
 #include "ZenTypes.h"
 

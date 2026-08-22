@@ -17,6 +17,8 @@
 
 #define NOMINMAX
 #include <Windows.h>
+#include <vector>
+#include <string_view>
 #undef NOMINMAX
 
 #include "SiUSBXp.h"

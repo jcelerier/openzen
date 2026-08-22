@@ -15,6 +15,8 @@
 
 #define NOMINMAX
 #include <Windows.h>
+#include <vector>
+#include <memory>
 #undef NOMINMAX
 
 namespace zen

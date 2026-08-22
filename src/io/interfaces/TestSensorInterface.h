@@ -14,6 +14,8 @@
 #include <array>
 #include <atomic>
 #include <thread>
+#include <string_view>
+#include <string>
 
 #include "io/IIoEventInterface.h"
 

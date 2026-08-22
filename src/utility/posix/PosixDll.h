@@ -12,6 +12,7 @@
 #define ZEN_UTILITY_LINUX_LINUXDLL_H_
 
 #include <string>
+#include <string_view>
 
 #include "utility/IPlatformDll.h"
 

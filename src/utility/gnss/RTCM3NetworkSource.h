@@ -24,6 +24,9 @@
 #include <asio/write.hpp>
 #include <asio/buffer.hpp>
 #include <asio/ip/tcp.hpp>
+#include <string>
+#include <memory>
+#include <array>
 
 namespace zen {
 

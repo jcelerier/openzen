@@ -18,6 +18,7 @@
 #include <thread>
 
 #include <aio.h>
+#include <vector>
 
 #include "io/IIoInterface.h"
 

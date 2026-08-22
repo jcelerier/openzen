@@ -20,6 +20,7 @@
 #include <thread>
 #include <future>
 #include <chrono>
+#include <vector>
 
 namespace zen {
 

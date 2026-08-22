@@ -10,6 +10,8 @@
 
 #ifndef ZEN_IO_SYSTEMS_LINUX_LINUXDEVICESYSTEM_H_
 #define ZEN_IO_SYSTEMS_LINUX_LINUXDEVICESYSTEM_H_
+#include <vector>
+#include <memory>
 
 #include "io/IIoSystem.h"
 

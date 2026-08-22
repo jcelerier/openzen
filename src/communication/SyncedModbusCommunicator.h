@@ -17,6 +17,8 @@
 
 #include <gsl/span>
 #include <nonstd/expected.hpp>
+#include <utility>
+#include <string_view>
 
 #include "communication/ModbusCommunicator.h"
 #include "utility/ThreadFence.h"

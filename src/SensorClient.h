@@ -16,6 +16,8 @@
 #include <unordered_map>
 
 #include <nonstd/expected.hpp>
+#include <string>
+#include <memory>
 
 #include "Sensor.h"
 #include "utility/LockingQueue.h"

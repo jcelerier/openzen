@@ -10,6 +10,7 @@
 
 #ifndef ZEN_COMPONENTS_FACTORIES_IMUCOMPONENTFACTORY_H_
 #define ZEN_COMPONENTS_FACTORIES_IMUCOMPONENTFACTORY_H_
+#include <memory>
 
 #include "components/IComponentFactory.h"
 

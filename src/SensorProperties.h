@@ -10,6 +10,7 @@
 
 #ifndef ZEN_SENSORPROPERTIES_H_
 #define ZEN_SENSORPROPERTIES_H_
+#include <utility>
 
 #include "ISensorProperties.h"
 #include "communication/SyncedModbusCommunicator.h"

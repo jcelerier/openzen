@@ -12,6 +12,8 @@
 #define ZEN_COMPONENTS_IMUIG1COMPONENT_H_
 
 #include <atomic>
+#include <string_view>
+#include <memory>
 
 #include "SensorComponent.h"
 #include "communication/SyncedModbusCommunicator.h"

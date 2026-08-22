@@ -22,6 +22,7 @@
 #include <cmath>
 
 #include <spdlog/spdlog.h>
+#include <memory>
 
 namespace zen {
     namespace sensor_parsing_util {

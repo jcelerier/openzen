@@ -12,6 +12,8 @@
 #define ZEN_PROPERTIES_LEGACYCOREPROPERTIES_H_
 
 #include <atomic>
+#include <utility>
+#include <string>
 
 #include "ISensorProperties.h"
 #include "communication/SyncedModbusCommunicator.h"

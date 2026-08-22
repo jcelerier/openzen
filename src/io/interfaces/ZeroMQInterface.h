@@ -18,6 +18,9 @@
 #include "io/IIoEventInterface.h"
 
 #include <zmq.hpp>
+#include <string_view>
+#include <string>
+#include <memory>
 
 namespace zen
 {

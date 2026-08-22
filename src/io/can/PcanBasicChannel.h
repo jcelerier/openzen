@@ -19,6 +19,8 @@
 #undef NOMINMAX
 
 #include <PCANBasic.h>
+#include <vector>
+#include <string_view>
 
 #include "io/can/ICanChannel.h"
 

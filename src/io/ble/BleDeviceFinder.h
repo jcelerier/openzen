@@ -15,6 +15,7 @@
 
 #include <QBluetoothDeviceDiscoveryAgent>
 #include <QThread>
+#include <vector>
 
 #include "ZenTypes.h"
 

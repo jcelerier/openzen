@@ -15,6 +15,8 @@
 #include <chrono>
 #include <optional>
 #include <memory>
+#include <string_view>
+#include <string>
 
 #ifndef ZEN_NO_RTK
 #include "utility/gnss/RTCM3NetworkSource.h"

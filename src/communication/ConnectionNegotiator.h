@@ -15,6 +15,8 @@
 #include <mutex>
 #include <vector>
 #include <utility>
+#include <string>
+#include <optional>
 
 #include "nonstd/expected.hpp"
 

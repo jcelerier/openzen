@@ -10,6 +10,7 @@
 
 #ifndef ZEN_COMMUNICATION_EVENTCOMMUNICATOR_H_
 #define ZEN_COMMUNICATION_EVENTCOMMUNICATOR_H_
+#include <memory>
 
 #include "ZenTypes.h"
 

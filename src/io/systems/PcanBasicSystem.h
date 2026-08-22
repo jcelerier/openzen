@@ -15,6 +15,8 @@
 #include "io/can/PcanBasicChannel.h"
 
 #include <set>
+#include <vector>
+#include <memory>
 
 namespace zen
 {

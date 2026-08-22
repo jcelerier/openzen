@@ -15,6 +15,7 @@
 #include <string>
 #include <string_view>
 #include <thread>
+#include <vector>
 
 #define NOMINMAX
 #include "ftd2xx.h"
