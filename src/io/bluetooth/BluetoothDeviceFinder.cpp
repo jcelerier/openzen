@@ -12,6 +12,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <memory>
 
 #include "utility/bluetooth-serial-port/DeviceINQ.h"
 
@@ -21,7 +22,9 @@ namespace zen
 {
     ZenError BluetoothDeviceFinder::listDevices(std::vector<ZenSensorDesc>& outDevices, bool applyWhitlelist)
     {
-        DeviceINQ* di = DeviceINQ::Create();
+        // Freed on every path, including Inquire() throwing when no
+        // Bluetooth adapter is available.
+        const std::unique_ptr<DeviceINQ> di{DeviceINQ::Create()};
 
         const auto devices = di->Inquire();
         for (const auto& device : devices) {
